@@ -1,21 +1,35 @@
 import type { Faker } from '../../faker';
 
-export type CSSFunction =
-  | 'color'
-  | 'rgb'
-  | 'rgba'
-  | 'hsl'
-  | 'hsla'
-  | 'hwb'
-  | 'cmyk'
-  | 'lab'
-  | 'lch';
-export type CSSSpace =
-  | 'sRGB'
-  | 'display-p3'
-  | 'rec2020'
-  | 'a98-rgb'
-  | 'prophoto-rgb';
+// TODO christopher 2023-01-27: Convert these CSS_SPACES and CSS_FUNCTIONS to Enums like SexType (https://github.com/faker-js/faker/pull/1748/files#r1072807325)
+
+/**
+ * Color space names supported by CSS.
+ */
+export const CSS_SPACES = [
+  'sRGB',
+  'display-p3',
+  'rec2020',
+  'a98-rgb',
+  'prophoto-rgb',
+] as const;
+
+/**
+ * Functions supported by CSS to produce color.
+ */
+export const CSS_FUNCTIONS = [
+  'rgb',
+  'rgba',
+  'hsl',
+  'hsla',
+  'hwb',
+  'cmyk',
+  'lab',
+  'lch',
+  'color',
+] as const;
+
+export type CSSFunction = (typeof CSS_FUNCTIONS)[number];
+export type CSSSpace = (typeof CSS_SPACES)[number];
 export type StringColorFormat = 'css' | 'binary';
 export type NumberColorFormat = 'decimal';
 export type ColorFormat = StringColorFormat | NumberColorFormat;
@@ -190,9 +204,7 @@ export class ColorModule {
    * @since 7.0.0
    */
   cssSupportedFunction(): string {
-    return this.faker.helpers.arrayElement(
-      this.faker.definitions.color.css_function
-    );
+    return this.faker.helpers.arrayElement(CSS_FUNCTIONS);
   }
 
   /**
@@ -204,9 +216,7 @@ export class ColorModule {
    * @since 7.0.0
    */
   cssSupportedSpace(): string {
-    return this.faker.helpers.arrayElement(
-      this.faker.definitions.color.css_space
-    );
+    return this.faker.helpers.arrayElement(CSS_SPACES);
   }
 
   /**
